@@ -1,0 +1,7 @@
+[package]
+name = "assh-treasure"
+version = "0.1.0"
+authors = ["John Anthony <john@jo.hnanthony.com>"]
+
+[dependencies]
+rand = "*"

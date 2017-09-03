@@ -12,14 +12,8 @@ enum CoinType {
 }
 
 #[derive(Debug)]
-struct Coins {
-    coin_type: CoinType,
-    quantity: u64,
-}
-
-#[derive(Debug)]
 enum Treasure {
-    Coins,
+    Coins { coin_type: CoinType, quantity: u64 },
 }
 
 fn dice_roll(quant: u64, sz: u64) -> u64 {
@@ -33,30 +27,72 @@ fn dice_roll(quant: u64, sz: u64) -> u64 {
     ret
 }
 
-fn main() {
-    let code = 'j';
+fn percent_chance(chance: u8) -> bool {
+    let mut rng = rand::thread_rng();
+    rng.gen::<u8>()%100 < chance
+}
 
-    let treasure = match code {
-        'j' => Coins {
+fn main() {
+    let code = 'p';
+    let mut treasure = Vec::new();
+
+    match code {
+        'j' => treasure.push(Treasure::Coins {
             coin_type: CoinType::Copper,
             quantity: dice_roll(4, 6)
-        },
-        'k' => Coins {
+        }),
+        'k' => treasure.push(Treasure::Coins {
             coin_type: CoinType::Silver,
             quantity: dice_roll(4, 4)
-        },
-        'l' => Coins {
+        }),
+        'l' => treasure.push(Treasure::Coins {
             coin_type: CoinType::Electrum,
             quantity: dice_roll(3, 4)
-        },
-        'm' => Coins {
+        }),
+        'm' => treasure.push(Treasure::Coins {
             coin_type: CoinType::Gold,
             quantity: dice_roll(1, 8)
-        },
-        'n' => Coins {
+        }),
+        'n' => treasure.push(Treasure::Coins {
             coin_type: CoinType::Platinum,
             quantity: dice_roll(1, 4) + 1
+        }),
+        'o' => {
+            if percent_chance(25) {
+                treasure.push(Treasure::Coins {
+                    coin_type: CoinType::Copper,
+                    quantity: dice_roll(2, 4)
+                })
+            }
+            if percent_chance(20) {
+                treasure.push(Treasure::Coins {
+                    coin_type: CoinType::Silver,
+                    quantity: dice_roll(1, 6)
+                })
+            }
         },
+        'p' => {
+            if percent_chance(30) {
+                treasure.push(Treasure::Coins {
+                    coin_type: CoinType::Silver,
+                    quantity: dice_roll(2, 6)
+                })
+            }
+            if percent_chance(20) {
+                treasure.push(Treasure::Coins {
+                    coin_type: CoinType::Electrum,
+                    quantity: dice_roll(1, 4)
+                })
+            }
+        },
+        'y' => {
+            if percent_chance(70) {
+                treasure.push(Treasure::Coins {
+                    coin_type: CoinType::Gold,
+                    quantity: dice_roll(4, 12)
+                })
+            }
+        }
         _ => panic!("Unknown treasure code")
     };
 

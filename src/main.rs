@@ -12,8 +12,20 @@ enum CoinType {
 }
 
 #[derive(Debug)]
+enum PotionType {
+    Healing
+}
+
+#[derive(Debug)]
 enum Treasure {
-    Coins { coin_type: CoinType, quantity: u64 },
+    Coins(CoinType),
+    Potion(PotionType),
+}
+
+#[derive(Debug)]
+struct TreasureEntry {
+    quantity: u64,
+    treasure: Treasure,
 }
 
 fn dice_roll(quant: u64, sz: u64) -> u64 {
@@ -34,61 +46,61 @@ fn percent_chance(chance: u8) -> bool {
 
 fn main() {
     let code = 'p';
-    let mut treasure = Vec::new();
+    let mut treasures = Vec::new();
 
     match code {
-        'j' => treasure.push(Treasure::Coins {
-            coin_type: CoinType::Copper,
+        'j' => treasures.push(TreasureEntry {
+            treasure: Treasure::Coins(CoinType::Copper),
             quantity: dice_roll(4, 6)
         }),
-        'k' => treasure.push(Treasure::Coins {
-            coin_type: CoinType::Silver,
+        'k' => treasures.push(TreasureEntry {
+            treasure: Treasure::Coins(CoinType::Silver),
             quantity: dice_roll(4, 4)
         }),
-        'l' => treasure.push(Treasure::Coins {
-            coin_type: CoinType::Electrum,
+        'l' => treasures.push(TreasureEntry {
+            treasure: Treasure::Coins(CoinType::Electrum),
             quantity: dice_roll(3, 4)
         }),
-        'm' => treasure.push(Treasure::Coins {
-            coin_type: CoinType::Gold,
+        'm' => treasures.push(TreasureEntry {
+            treasure: Treasure::Coins(CoinType::Gold),
             quantity: dice_roll(1, 8)
         }),
-        'n' => treasure.push(Treasure::Coins {
-            coin_type: CoinType::Platinum,
+        'n' => treasures.push(TreasureEntry {
+            treasure: Treasure::Coins(CoinType::Platinum),
             quantity: dice_roll(1, 4) + 1
         }),
         'o' => {
             if percent_chance(25) {
-                treasure.push(Treasure::Coins {
-                    coin_type: CoinType::Copper,
+                treasures.push(TreasureEntry {
+                    treasure: Treasure::Coins(CoinType::Copper),
                     quantity: dice_roll(2, 4)
                 })
             }
             if percent_chance(20) {
-                treasure.push(Treasure::Coins {
-                    coin_type: CoinType::Silver,
+                treasures.push(TreasureEntry {
+                    treasure: Treasure::Coins(CoinType::Silver),
                     quantity: dice_roll(1, 6)
                 })
             }
         },
         'p' => {
             if percent_chance(30) {
-                treasure.push(Treasure::Coins {
-                    coin_type: CoinType::Silver,
+                treasures.push(TreasureEntry {
+                    treasure: Treasure::Coins(CoinType::Silver),
                     quantity: dice_roll(2, 6)
                 })
             }
             if percent_chance(20) {
-                treasure.push(Treasure::Coins {
-                    coin_type: CoinType::Electrum,
+                treasures.push(TreasureEntry {
+                    treasure: Treasure::Coins(CoinType::Electrum),
                     quantity: dice_roll(1, 4)
                 })
             }
         },
         'y' => {
             if percent_chance(70) {
-                treasure.push(Treasure::Coins {
-                    coin_type: CoinType::Gold,
+                treasures.push(TreasureEntry {
+                    treasure: Treasure::Coins(CoinType::Gold),
                     quantity: dice_roll(4, 12)
                 })
             }
@@ -98,5 +110,5 @@ fn main() {
 
     println!("TREASURE");
     println!("========");
-    println!("{:?}", treasure);
+    println!("{:?}", treasures);
 }
